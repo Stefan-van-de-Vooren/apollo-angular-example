@@ -1,29 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
-
-import { Post, Query } from './types';
+import {Post, Query} from '../types';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
-  selector: 'app-list',
-  template: `
-    <ul>
-      <li *ngFor="let post of posts | async">
-        {{post.title}} by {{post.author.firstName}} {{post.author.lastName}}
-        ({{post.votes}} votes)
-        <app-upvoter [postId]="post.id"></app-upvoter>
-      </li>
-    </ul>
-  `
+  selector: 'app-post-list',
+  templateUrl: './post-list.component.html',
+  styleUrls: ['./post-list.component.css']
 })
-export class ListComponent implements OnInit {
+export class PostListComponent implements OnInit {
+
   posts: Observable<Post[]>;
+
   constructor(private apollo: Apollo) {}
 
   ngOnInit() {
+    console.log('ng init')
     this.posts = this.apollo.watchQuery<Query>({
       query: gql`
         query allPosts {
@@ -45,4 +39,5 @@ export class ListComponent implements OnInit {
         map(result => result.data.posts)
       );
   }
+
 }
