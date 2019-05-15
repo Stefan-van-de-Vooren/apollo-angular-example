@@ -1,19 +1,20 @@
-export type Author = {
+export interface Author {
   id: number;
   firstName: string;
   lastName: string;
 }
 
-export type Post = {
+export interface Post {
   id: number;
   title: string;
   votes: number;
+  author: Author;
 }
 
-export type Query = {
+export interface Query {
   posts: Post[];
 }
 
-export type Mutation = {
+export interface Mutation {
   upvotePost: Post;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import {Post, Query} from '../types';
@@ -12,14 +12,19 @@ import {Observable} from 'rxjs';
 })
 export class PostListComponent implements OnInit {
 
-  posts: Observable<Post[]>;
+  public posts: Observable<Post[]>;
 
   constructor(private apollo: Apollo) {}
 
-  ngOnInit() {
-    console.log('ng init')
-    this.posts = this.apollo.watchQuery<Query>({
-      query: gql`
+  private authorFragment = gql`
+    fragment AuthorPageComment on Author {
+      id
+      firstName
+      lastName
+    }
+  `;
+
+  private allPostQuery = gql`
         query allPosts {
           posts {
             id
@@ -27,17 +32,21 @@ export class PostListComponent implements OnInit {
             votes
             author {
               id
-              firstName
-              lastName
+              ...AuthorPageComment
             }
           }
         }
-      `,
+        ${this.authorFragment}
+      `;
+
+  ngOnInit() {
+    console.log('ng init')
+    this.posts = this.apollo.watchQuery<Query>({
+      query: this.allPostQuery
     })
       .valueChanges
       .pipe(
         map(result => result.data.posts)
       );
   }
-
 }

@@ -3,5 +3,6 @@
     {{post.title}} by {{post.author.firstName}} {{post.author.lastName}}
     ({{post.votes}} votes)
     <!--<app-upvoter [postId]="post.id"></app-upvoter>-->
+    <app-author [post]="post"></app-author>
   </li>
 </ul>
